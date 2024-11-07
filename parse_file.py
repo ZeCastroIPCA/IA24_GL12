@@ -1,4 +1,6 @@
 def parse_file(file_path):
+
+    # Initialize data dictionary
     data = {
         'projects': {},
         'precedence': {},
@@ -7,13 +9,17 @@ def parse_file(file_path):
     }
     current_section = None
 
+    # Open the file
     with open(file_path, 'r') as file:
         for line in file:
+            # Remove leading and trailing whitespaces
             line = line.strip()
 
+            # Skip empty lines and comments
             if line.startswith("*") or not line:
                 continue
 
+            # Check for section headers
             if line.startswith("#Projects summary"):
                 current_section = 'projects'
                 continue
@@ -27,12 +33,14 @@ def parse_file(file_path):
                 current_section = 'resource_availability'
                 continue
 
+            # Skip lines with keywords
             if any(keyword in line for keyword in ["pronr.", "#jobs", "#modes", "resource", "qty", "jobnr.", "#successors", "mode", "duration"]):
                 continue
 
             # print("Line: ", line)
             # print("Current section: ", current_section)
 
+            # Parse data based on the current section
             if current_section == 'projects':
                 parts = line.split()
                 project_id = int(parts[0])
