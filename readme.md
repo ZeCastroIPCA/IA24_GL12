@@ -44,3 +44,7 @@ R2      2
 ```bash
 pip3 install python-constraint
 ```
+### Run the solver
+```bash
+python3 csp.py
+```
