@@ -1,0 +1,23 @@
+##head
+— Classes will be schedule from Monday to Friday
+— Each day has 4 blocks of 2 hour each
+— We assume all classes have 2 hours
+— Blocks are numbered from 1 to 20 (5 days *4 blocks), Monday morning 
+
+#tr — timeslot  restrictions
+jo        17 18 19 20
+mike   13 14 15 16 17 18 19 20
+rob      1 2 3 4
+sue      9 10 11 12 16 17 18 19 20
+
+#dsd — courses assigned to lecturers
+jo          UC11 UC21 UC22 UC31
+mike     UC12 UC23 UC32
+rob        UC13 UC14 UC24 UC33
+sue       UC15 UC25 UC34 UC35
+
+#cc — courses assigned to classes
+t01         UC11 UC12 UC13 UC14 UC15
+t02         UC21 UC22 UC23 UC24 UC25
+t03         UC31 UC32 UC33 UC34 UC35
+
