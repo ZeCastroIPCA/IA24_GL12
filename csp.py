@@ -21,6 +21,7 @@ resource_availability_data = parsed_data['resource_availability']
 
 # Create a dictionary to store the project variables
 jobs = {}
+resources = {}
 for project in projects_data:
     # print(f"Project: {project}")
     for job, job_data in precedence_data.items():
@@ -29,14 +30,20 @@ for project in projects_data:
         # print(f"Duration: {duration_resources_data[job]['duration']}")
         # print(f"Resources: {duration_resources_data[job]['resources']}")
 
+        # Store the job data in the jobs dictionary
         jobs[job] = {
             'successors': job_data['successors'],
             'duration': duration_resources_data[job]['duration'],
             'resources': duration_resources_data[job]['resources']
         }
 
-print("Jobs: ", jobs)
+    # Store the resources availability
+    for resource in resource_availability_data.keys():
+        resources[resource] = resource_availability_data[resource]['quantity']
 
 
+# Print the jobs and resources
+print(f"\nJobs: {jobs}")
+print(f"\nResources: {resources}")
 # Start the CSP problem
 problem = Problem()
