@@ -5,7 +5,6 @@ import argparse
 # Import custom file parsing function
 from parse_file import parse_file
 
-# Read the input file
 # Set up argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument("file_path")
@@ -13,6 +12,8 @@ parser.add_argument("file_path")
 # Parse arguments
 args = parser.parse_args()
 file_path = args.file_path
+
+# Read the input file
 parsed_data = parse_file(file_path)
 
 # Extract relevant data from parsed file
