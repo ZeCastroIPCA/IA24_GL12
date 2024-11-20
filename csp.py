@@ -47,7 +47,7 @@ problem = Problem()
 
 # Add variables for each job's start time
 for job_id in jobs:
-    problem.addVariable(job_id, range(max_time + 1))
+    problem.addVariable(job_id, range(1, max_time))
 
 # Define precedence constraint function
 def check_precedence(job1, job2):
@@ -138,7 +138,7 @@ if solution:
                 timeline[t][resource] += amount
     
     # Display maximum resource utilization
-    print("\nMaximum resource utilization:")
+    print("Maximum resource utilization:")
     for resource in resources:
         max_usage = max(timeline[t][resource] for t in timeline)
         capacity = resources[resource]
