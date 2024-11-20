@@ -39,15 +39,28 @@ print(f"\nJobs: {jobs}")
 print(f"\nResources: {resources}")
 
 # Calculate maximum possible timespan across all jobs
-max_time = sum(jobs[j]['duration'] for j in jobs)
+max_time = projects_data[1]['due_date']
 print(f"Maximum timespan: {max_time}")
 
 # Create CSP problem instance
 problem = Problem()
 
-# Add variables for each job's start time
+# Calculate minimum possible start times based on precedence
+def calculate_minimum_start_times(jobs):
+    earliest_starts = {}
+    for job_id in jobs:
+        earliest_starts[job_id] = 1  # Default to earliest possible time
+        for other_job, other_data in jobs.items():
+            if job_id in other_data['successors']:
+                # Ensure this job starts after the other job completes
+                earliest_starts[job_id] = max(earliest_starts[job_id], 1 + jobs[other_job]['duration'])
+    return earliest_starts
+
+# Before solving, update variable domains
+min_start_times = calculate_minimum_start_times(jobs)
+print(f"\nMinimum start times: {min_start_times}")
 for job_id in jobs:
-    problem.addVariable(job_id, range(1, max_time))
+    problem.addVariable(job_id, range(min_start_times[job_id], max_time))
 
 # Define precedence constraint function
 def check_precedence(job1, job2):
