@@ -48,3 +48,34 @@ pip3 install python-constraint
 ```bash
 python3 csp.py
 ```
+## Output
+### Example output
+The output will be a list of jobs with their respective start and end times.
+```txt
+==================================================
+SOLUTION FOUND!
+==================================================
+
+Total makespan: 20 time units
+
+Detailed Schedule:
+--------------------------------------------------
+Job        Start      Duration   End       
+--------------------------------------------------
+5          11         2          13        
+7          12         4          16        
+6          12         3          15        
+1          13         2          15        
+3          15         4          19        
+2          16         3          19        
+4          19         1          20        
+8          19         1          20        
+
+Resource Utilization:
+--------------------------------------------------
+Maximum resource utilization:
+R1: 1/1 units (max/capacity)
+R2: 2/2 units (max/capacity)
+
+==================================================
+```
