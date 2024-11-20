@@ -48,7 +48,7 @@ print(f"\nResources: {resources}")
 
 # Calculate maximum possible timespan across all jobs
 max_time = projects_data[1]['due_date']
-print(f"Maximum timespan: {max_time}")
+print(f"\nMaximum Timespan: {max_time}")
 
 # Create CSP problem instance
 problem = Problem()
@@ -72,17 +72,21 @@ for job_id in jobs:
 
 # Define precedence constraint function
 def check_precedence(job1, job2):
-    def constraint(*args):
-        if len(args) >= 2:  # We need at least the two time values
-            time1, time2 = args[-2:]  # Get the last two arguments
-            return time1 + jobs[job1]['duration'] <= time2
-        return True
+    print(f"Checking precedence between {job1} and {job2}")
+    def constraint(time1, time2):
+        # Ensure that job1 finishes before job2 starts
+        return time1 + jobs[job1]['duration'] <= time2
     return constraint
+
 
 # Add precedence constraints for pairs of jobs
 for job_id, job_data in jobs.items():
     for successor in job_data['successors']:
-        problem.addConstraint(check_precedence(job_id, successor), (job_id, successor))
+        if successor in jobs:  # Ensure the successor exists
+            problem.addConstraint(
+                check_precedence(job_id, successor), 
+                (job_id, successor)
+            )
 
 # Define resource constraint function
 def check_resources(*args):
@@ -109,14 +113,66 @@ def check_resources(*args):
                 timeline[t][resource] += amount
                 if timeline[t][resource] > resources[resource]:
                     return False
-    
     return True
 
 # Add resource constraints
 problem.addConstraint(check_resources, jobs.keys())
 
+def solve_asap(problem, jobs, resources):
+    # Initial solution from the solver
+    solution = problem.getSolution()
+    if not solution:
+        return None  # No solution found
+    
+    def is_feasible(solution):
+        """Check if a solution is feasible with respect to constraints."""
+        # Check precedence constraints
+        for job_id, start_time in solution.items():
+            for successor in jobs[job_id]['successors']:
+                if start_time + jobs[job_id]['duration'] > solution[successor]:
+                    return False
+
+        # Check resource constraints
+        timeline = {}
+        for job_id, start_time in solution.items():
+            duration = jobs[job_id]['duration']
+            job_resources = jobs[job_id]['resources']
+
+            for t in range(start_time, start_time + duration):
+                if t not in timeline:
+                    timeline[t] = {r: 0 for r in resources.keys()}
+
+                for resource_idx, amount in enumerate(job_resources):
+                    resource = f'R{resource_idx + 1}'
+                    timeline[t][resource] += amount
+                    if timeline[t][resource] > resources[resource]:
+                        return False
+        return True
+
+    # Minimize start times iteratively
+    while True:
+        minimized = False
+        for job_id in sorted(jobs.keys(), key=lambda j: int(j)):  # Iterate in job order
+            current_start = solution[job_id]
+
+            # Try earlier start times while maintaining feasibility
+            for t in range(min_start_times[job_id], current_start):
+                test_solution = solution.copy()
+                test_solution[job_id] = t
+
+                # Check feasibility
+                if is_feasible(test_solution):
+                    solution[job_id] = t
+                    minimized = True
+                    break  # Move to the next job
+
+        if not minimized:
+            break  # No further improvement possible
+
+    return solution
+
 # Solve the CSP problem
-solution = problem.getSolution()
+solution = solve_asap(problem, jobs, resources)
 
 if solution:
     # Sort jobs by start time
