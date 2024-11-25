@@ -85,11 +85,13 @@ R2: 2/2 units (max/capacity)
    - The program starts by parsing an input file containing project data
    - Input data includes project details, precedence relations, durations, and resource constraints
    - Data is parsed into structured dictionaries for easy processing
+
 2. **Problem Setup**
    - Creates a CSP problem instance using the python-constraint library
    - Builds two main dictionaries:
      - `jobs`: Contains job information including successors, duration, and resource requirements
      - `resources`: Stores available quantities for each resource type
+
 3. **Constraint Implementation**
    #### Precedence Constraints
    - Ensures jobs are scheduled in the correct order
@@ -103,6 +105,7 @@ R2: 2/2 units (max/capacity)
    - Calculates minimum start times based on precedence relations
    - Uses project due date as maximum timespan
    - Optimizes schedule to start as early as possible
+   
 4. **Solution Algorithm**
    The solver uses a two-phase approach:
    1. Initial solution finding using CSP backtracking
