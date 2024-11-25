@@ -105,7 +105,7 @@ R2: 2/2 units (max/capacity)
    - Calculates minimum start times based on precedence relations
    - Uses project due date as maximum timespan
    - Optimizes schedule to start as early as possible
-   
+
 4. **Solution Algorithm**
    The solver uses a two-phase approach:
    1. Initial solution finding using CSP backtracking
@@ -120,6 +120,7 @@ The program provides comprehensive output including:
    - Duration of each job
    - End time for each job
    - Total makespan of the project
+   
 2. **Resource Analysis**
    - Maximum utilization for each resource type
    - Comparison against available capacity
