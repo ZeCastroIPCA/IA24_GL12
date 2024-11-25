@@ -66,13 +66,13 @@ def calculate_minimum_start_times(jobs):
 
 # Before solving, update variable domains
 min_start_times = calculate_minimum_start_times(jobs)
-print(f"\nMinimum start times: {min_start_times}")
+#print(f"\nMinimum start times: {min_start_times}")
 for job_id in jobs:
     problem.addVariable(job_id, range(min_start_times[job_id], max_time))
 
 # Define precedence constraint function
 def check_precedence(job1, job2):
-    print(f"Checking precedence between {job1} and {job2}")
+    #print(f"Checking precedence between {job1} and {job2}")
     def constraint(time1, time2):
         # Ensure that job1 finishes before job2 starts
         return time1 + jobs[job1]['duration'] <= time2

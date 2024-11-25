@@ -79,3 +79,61 @@ R2: 2/2 units (max/capacity)
 
 ==================================================
 ```
+## How the Code Works
+### Core Components
+1. **File Parsing**
+   - The program starts by parsing an input file containing project data
+   - Input data includes project details, precedence relations, durations, and resource constraints
+   - Data is parsed into structured dictionaries for easy processing
+2. **Problem Setup**
+   - Creates a CSP problem instance using the python-constraint library
+   - Builds two main dictionaries:
+     - `jobs`: Contains job information including successors, duration, and resource requirements
+     - `resources`: Stores available quantities for each resource type
+3. **Constraint Implementation**
+   #### Precedence Constraints
+   - Ensures jobs are scheduled in the correct order
+   - Each job must complete before its successors can start
+   - Implemented through the `check_precedence` function
+   #### Resource Constraints
+   - Prevents resource overallocation at any time
+   - Tracks resource usage across the timeline
+   - Implemented through the `check_resources` function
+   #### Time Window Constraints
+   - Calculates minimum start times based on precedence relations
+   - Uses project due date as maximum timespan
+   - Optimizes schedule to start as early as possible
+4. **Solution Algorithm**
+   The solver uses a two-phase approach:
+   1. Initial solution finding using CSP backtracking
+   2. Solution optimization using the `solve_asap` function to:
+      - Find earliest possible start times
+      - Maintain feasibility of all constraints
+      - Minimize the overall makespan
+### Output Details
+The program provides comprehensive output including:
+1. **Schedule Information**
+   - Start time for each job
+   - Duration of each job
+   - End time for each job
+   - Total makespan of the project
+2. **Resource Analysis**
+   - Maximum utilization for each resource type
+   - Comparison against available capacity
+   - Resource usage timeline
+## Implementation Notes
+### Key Functions
+- `calculate_minimum_start_times()`: Computes earliest possible start times
+- `check_precedence()`: Validates precedence relationships
+- `check_resources()`: Ensures resource constraints are met
+- `solve_asap()`: Optimizes the schedule for earliest possible starts
+### Optimization Strategy
+The solver implements a "as soon as possible" scheduling strategy by:
+1. Finding a valid initial solution
+2. Iteratively moving jobs earlier while maintaining feasibility
+3. Considering both precedence and resource constraints during optimization
+## Limitations
+- The solver assumes single-mode activities
+- All resources are renewable
+- No preemption is allowed (jobs cannot be interrupted once started)
+- Resource requirements are constant throughout job duration
