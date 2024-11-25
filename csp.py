@@ -48,7 +48,7 @@ print(f"\nResources: {resources}")
 
 # Calculate maximum possible timespan across all jobs
 max_time = projects_data[1]['due_date']
-print(f"\nMaximum Timespan: {max_time}")
+print(f"\nMaximum Tempospan: {max_time}")
 
 # Create CSP problem instance
 problem = Problem()
@@ -189,7 +189,7 @@ if solution:
     
     print("\nDetailed Schedule:")
     print("-"*50)
-    print(f"{'Job':<10} {'Start':<10} {'Duration':<10} {'End':<10}")
+    print(f"{'Job':<10} {'Começo':<10} {'Duration':<10} {'End':<10}")
     print("-"*50)
     
     for job_id, start_time in sorted_schedule:
@@ -226,3 +226,48 @@ else:
     print("The problem might be over-constrained or need more time to solve.")
 
 print("\n" + "="*50)
+
+# Visualize the data in a Gantt chart
+import matplotlib.pyplot as plt
+import pandas as pd 
+
+# Create a DataFrame for Gantt chart
+gantt_data = []
+for job_id, start_time in solution.items():
+    duration = jobs[job_id]['duration']
+    end_time = start_time + duration
+    gantt_data.append({
+        'Job': job_id,
+        'Começo': start_time,
+        'Termina': end_time
+    })
+
+# Create a DataFrame for resource utilization
+resource_data = []
+for t, resources in timeline.items():
+    resource_data.append({
+        'Tempo': t,
+        **resources
+    })
+
+# Create Gantt chart
+df = pd.DataFrame(gantt_data)
+fig, ax = plt.subplots(figsize=(10, 5))
+
+# Plot Gantt chart
+for i, task in enumerate(df['Job']):
+    ax.plot(
+        (df['Começo'][i], df['Termina'][i]),
+        (i, i),
+        color='b', linewidth=10
+    )
+
+# Set labels
+ax.set_yticks(range(len(df['Job'])))
+ax.set_yticklabels(df['Job'])
+ax.set_xlabel('Tempo')
+ax.set_ylabel('Job')
+ax.set_title('Escala do Projeto')
+
+# Display Gantt chart
+plt.show()

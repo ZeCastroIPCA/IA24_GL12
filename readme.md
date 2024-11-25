@@ -40,16 +40,17 @@ R2      2
 ************************************************************************
 ```
 ## How to replicate
-### Install dependencies (contraint library)
+### Install dependencies
 ```bash
-pip3 install python-constraint
+pip3 install python-constraint pandas matplotlib
 ```
 ### Run the solver
 ```bash
 python3 csp.py
 ```
 ## Output
-### Example output
+### Example Output
+#### Terminal Output
 The output will be a list of jobs with their respective start and end times.
 ```txt
 ==================================================
@@ -79,6 +80,9 @@ R2: 2/2 units (max/capacity)
 
 ==================================================
 ```
+#### Job Schedule Graph
+The program will also generate a Gantt chart showing the schedule of each job.
+![Job Schedule](./chart.png)
 ## How the Code Works
 ### Core Components
 1. **File Parsing**
@@ -120,7 +124,7 @@ The program provides comprehensive output including:
    - Duration of each job
    - End time for each job
    - Total makespan of the project
-   
+
 2. **Resource Analysis**
    - Maximum utilization for each resource type
    - Comparison against available capacity
